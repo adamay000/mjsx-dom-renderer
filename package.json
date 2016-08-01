@@ -1,0 +1,5 @@
+{
+  "name": "mjsx-dom-renderer",
+  "version": "1.0.0",
+  "main": "dom-renderer.js"
+}

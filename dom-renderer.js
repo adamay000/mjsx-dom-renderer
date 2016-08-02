@@ -23,8 +23,19 @@ const DomRenderer = {
       return $fragment;
     }
 
-    const $dom = (!domData.tag || domData.tag === 'dummy') ? document.createDocumentFragment() : document.createElement(domData.tag);
+    const nameSpace = domData.attrs && domData.attrs.nameSpace || domData.inheritNameSpace || '';
+
+    const $dom = (!domData.tag || domData.tag === 'dummy') ?
+      document.createDocumentFragment() :
+      nameSpace ?
+        document.createElementNS(nameSpace, domData.tag) :
+        document.createElement(domData.tag);
+
     domData.attrs && Object.keys(domData.attrs).forEach(attrName => {
+      if (attrName === 'nameSpace') {
+        return;
+      }
+
       if (attrName === 'className') {
         $dom.className = domData.attrs.className;
         return;
@@ -52,6 +63,7 @@ const DomRenderer = {
     });
 
     domData.children && domData.children.forEach(child => {
+      child.inheritNameSpace = nameSpace;
       $dom.appendChild(DomRenderer.createDom(child));
     });
 
